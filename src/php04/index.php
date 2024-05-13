@@ -1,0 +1,69 @@
+<?php
+
+    require_once ("config/status_codes.php");
+    $random_numbers = array_rand ($status_codes,4);
+
+    /* 取り出した選択肢4つそれぞれの名前（変数）が$index
+    array_randは取り出すのみ。取ったのをforeachで要素ごとに表示。optionは選択肢 */
+    foreach ($random_numbers as $index) {
+        $options[] = $status_codes[$index];
+    }
+    /* $questionは正答 */
+    $question = $options[mt_rand(0,3)];
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/sanitize.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Status Code Quiz</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header__inner">
+            <a href="/php04" class="header__logo">
+                Status Code Quiz
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="quiz__content">
+            <div class="question">
+                <p class="question__text">
+                    Q. 以下の内容に当てはまるステータスコードを選んでください
+                </p>
+                <!-- 選んだ正解の説明文の表示 -->
+                <p class="question__text">
+                    <?php echo $question["description"] ?>
+                </p>
+            </div>
+            <!-- formクラス,回答欄 -->
+            <form action="result.php" class="quiz-form" method="post">
+                <!-- このinput typeはなんのためにあるんだろう
+                    ▶︎解答となるデータ送信のため -->
+                <input type="hidden" name="answer_code" value="<?php echo $question['code'] ?>">
+                <div class="quiz-form__item">
+                    <?php foreach ($options as $option): ?>
+                    <div class="quiz-form__group">
+                        <input class="quiz-form__radio" id="<?php echo $option['code'] ?>" type="radio" name="option" value="<?php echo $option['code'] ?>">
+                        <label for="<?php echo $option["code"] ?>" class="quiz-form__label">
+                        <?php echo $option["code"] ?>
+                        </label>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="quiz-form__button">
+                    <button class="quiz-form__button-submit" type="submit">
+                        回答
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
